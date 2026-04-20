@@ -1,10 +1,10 @@
-WORKDIR /app
+from flask import Flask
 
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+app = Flask(__name__)
 
-COPY . .
+@app.route("/")
+def home():
+    return "Hello Azure CI/CD 🚀 Version 6"
 
-ENV PORT=8000
-
-CMD ["sh", "-c", "gunicorn -b 0.0.0.0:${PORT} app:app"]
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8000)
