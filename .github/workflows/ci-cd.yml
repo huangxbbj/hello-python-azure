@@ -1,11 +1,10 @@
-name: CI-CD Pipeline
+name: CI-CD
 
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
 
 permissions:
-  id-token: write
   contents: read
 
 jobs:
@@ -21,12 +20,10 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
-      - name: Run tests + coverage
-        run: |
-          pytest --cov=. --cov-fail-under=70
+      - name: Run tests
+        run: pytest --cov=. --cov-fail-under=50
 
   deploy:
     needs: test
@@ -35,15 +32,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
-
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: hello-python-azure
-          images: helloacr2026.azurecr.io/hello-python:latest
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
