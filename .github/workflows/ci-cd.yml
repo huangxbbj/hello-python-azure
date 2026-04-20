@@ -35,12 +35,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Azure Login (OIDC)
+      - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_DEEB549CC1034292981FE37FC9118107 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_02965D2CA6E34AB197DB138D7DBCB33B }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_17320AABE9A14CB8A2349162133C8956 }}
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
