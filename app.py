@@ -1,10 +1,12 @@
-from flask import Flask
+FROM python:3.11
 
-app = Flask(__name__)
+WORKDIR /app
 
-@app.route("/")
-def home():
-    return "Hello Docker + Azure CI/CD, Version 5!"
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000)
+COPY . .
+
+ENV PORT=8000
+
+CMD ["sh", "-c", "gunicorn -b 0.0.0.0:${PORT} app:app"]
