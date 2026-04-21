@@ -41,15 +41,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Login to Azure
+      - name: Azure login (OIDC)
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_DEEB549CC1034292981FE37FC9118107 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_02965D2CA6E34AB197DB138D7DBCB33B }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_17320AABE9A14CB8A2349162133C8956 }}
 
-      # 🐳 更新 Web App 使用 Docker
-      - name: Deploy container to Azure Web App
+      - name: Deploy to Azure Web App (Container)
         uses: azure/webapps-deploy@v3
         with:
           app-name: hello-python-azure
