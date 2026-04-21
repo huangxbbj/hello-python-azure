@@ -28,7 +28,7 @@ jobs:
       # 🔐 登录 ACR
       - name: Docker login
         run: |
-          echo ${{ secrets.ACR_PASSWORD }} | docker login ${{ secrets.ACR_NAME }} -u ${{ secrets.ACR_USERNAME }} --password-stdin
+          echo ${{ secrets.ACR_PASSWORD }} | docker login ${{ secrets.ACR_NAME }} -u ${{ secrets.ACR_USER }} --password-stdin
 
       # 🚀 Push 镜像
       - name: Push image
