@@ -23,7 +23,7 @@ jobs:
       # 🐳 Docker build
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.ACR_NAME }}/hello-python:latest .
+          docker build -t ${{ secrets.ACR_NAME }}.azurecr.io/hello-python:latest .
 
       # 🔐 登录 ACR
       - name: Docker login
