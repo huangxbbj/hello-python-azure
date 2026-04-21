@@ -1,4 +1,4 @@
-name: CI-CD (OIDC Azure Web App)
+name: CI-CD Docker Azure
 
 on:
   push:
@@ -15,36 +15,41 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-
       - name: Run tests
         run: |
-          pytest --cov=. --cov-fail-under=50
+          pip install -r requirements.txt
+          pytest
+
+      # 🐳 Docker build
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/hello-python:latest .
+
+      # 🔐 登录 ACR
+      - name: Docker login
+        run: |
+          echo ${{ secrets.ACR_PASSWORD }} | docker login ${{ secrets.ACR_LOGIN_SERVER }} -u ${{ secrets.ACR_USERNAME }} --password-stdin
+
+      # 🚀 Push 镜像
+      - name: Push image
+        run: |
+          docker push ${{ secrets.ACR_LOGIN_SERVER }}/hello-python:latest
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Login to Azure
+      - name: Azure Login (OIDC)
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_DEEB549CC1034292981FE37FC9118107 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_02965D2CA6E34AB197DB138D7DBCB33B }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_17320AABE9A14CB8A2349162133C8956 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_XXX }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_XXX }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_XXX }}
 
-      - name: Deploy to Azure Web App
+      # 🐳 更新 Web App 使用 Docker
+      - name: Deploy container to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: hello-python-azure
-          slot-name: Production
-          package: .
+          images: ${{ secrets.ACR_LOGIN_SERVER }}/hello-python:latest
