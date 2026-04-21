@@ -33,7 +33,7 @@ jobs:
       # 🚀 Push 镜像
       - name: Push image
         run: |
-          docker push ${{ secrets.ACR_LOGIN_SERVER }}/hello-python:latest
+          docker push ${{ secrets.ACR_NAME }}/hello-python:latest
 
   deploy:
     needs: build
