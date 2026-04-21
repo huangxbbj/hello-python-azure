@@ -52,4 +52,4 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: hello-python-azure
-          images: ${{ secrets.ACR_LOGIN_SERVER }}/hello-python:latest
+          images: ${{ secrets.ACR_NAME }}.azurecr.io/hello-python:latest
